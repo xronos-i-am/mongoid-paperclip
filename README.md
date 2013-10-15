@@ -14,7 +14,7 @@ Simply define the `mongoid-paperclip` gem inside your `Gemfile`. Additionally, y
 
 **Rails.root/Gemfile - Just define the following:**
 
-    gem "mongoid-paperclip", :require => "mongoid_paperclip"
+    gem "glebtv-mongoid-paperclip"
     gem 'aws-sdk', '~> 1.3.4'
 
 Next let's assume we have a User model and we want to allow our users to upload an avatar.
