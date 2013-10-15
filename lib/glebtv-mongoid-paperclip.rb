@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require "mongoid-paperclip/version"
+
 begin
   require "paperclip"
 rescue LoadError

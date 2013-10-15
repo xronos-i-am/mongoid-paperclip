@@ -1,9 +1,11 @@
-# encoding: utf-8
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'mongoid-paperclip/version'
 
 Gem::Specification.new do |gem|
-
   gem.name        = 'glebtv-mongoid-paperclip'
-  gem.version     = '0.0.8'
+  gem.version     = Mongoid::Paperclip::VERSION
   gem.platform    = Gem::Platform::RUBY
   gem.authors     = ['GlebTV', 'Michael van Rooijen']
   gem.email       = 'meskyanichi@gmail.com'
@@ -13,9 +15,10 @@ Gem::Specification.new do |gem|
 
   gem.files         = %x[git ls-files].split("\n")
   gem.test_files    = %x[git ls-files -- {spec}/*].split("\n")
-  gem.require_path  = 'lib'
+  gem.require_paths = ['lib']
 
   gem.add_dependency 'paperclip', ['>= 2.3.6']
-
+  gem.add_development_dependency "bundler", "~> 1.3"
+  gem.add_development_dependency "rake"
 end
 
