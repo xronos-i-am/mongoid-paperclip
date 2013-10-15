@@ -2,13 +2,13 @@
 
 Gem::Specification.new do |gem|
 
-  gem.name        = 'mongoid-paperclip'
+  gem.name        = 'glebtv-mongoid-paperclip'
   gem.version     = '0.0.8'
   gem.platform    = Gem::Platform::RUBY
-  gem.authors     = 'Michael van Rooijen'
+  gem.authors     = ['GlebTV', 'Michael van Rooijen']
   gem.email       = 'meskyanichi@gmail.com'
-  gem.homepage    = 'https://github.com/meskyanichi/mongoid-paperclip'
-  gem.summary     = 'Mongoid::Paperclip enables you to use Paperclip with the Mongoid ODM for MongoDB.'
+  gem.homepage    = 'https://github.com/glebtv/mongoid-paperclip'
+  gem.summary     = 'Fork of Mongoid::Paperclip'
   gem.description = 'Mongoid::Paperclip enables you to use Paperclip with the Mongoid ODM for MongoDB.'
 
   gem.files         = %x[git ls-files].split("\n")
