@@ -18,7 +18,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_dependency 'paperclip', ['>= 2.3.6']
+  gem.add_dependency "mongoid", [">= 3.0", "< 5.0"]
   gem.add_development_dependency "bundler", "~> 1.3"
+  gem.add_development_dependency "rspec"
   gem.add_development_dependency "rake"
 end
 
