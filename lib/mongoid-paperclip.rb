@@ -67,6 +67,7 @@ end
 #  field :avatar_updated_at,   :type => DateTime
 #  field :avatar_fingerprint,  :type => String
 
+# TODO Remove when https://github.com/thoughtbot/paperclip/issues/1403 is merged
 require 'paperclip/callbacks'
 module Paperclip
   module Callbacks
