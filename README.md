@@ -1,6 +1,10 @@
 Mongoid::Paperclip - Making Paperclip play nice with Mongoid ODM
 ================================================================
 
+## WARN
+
+.destroy_all on embedded relations DOES NOT WORK, you have to use .destroy
+
 As the title suggests: `Mongoid::Paperclip` makes it easy to hook up [Paperclip](https://github.com/thoughtbot/paperclip) with [Mongoid](http://mongoid.org/).
 
 This is actually easier and faster to set up than when using Paperclip and the ActiveRecord ORM.

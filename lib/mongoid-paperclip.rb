@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require "mongoid-paperclip/version"
+require "active_support/concern"
 
 begin
   require "paperclip"
@@ -15,13 +16,25 @@ Paperclip.interpolates :id_partition do |attachment, style|
   attachment.instance.id.to_s.scan(/.{4}/).join("/")
 end
 
+Paperclip.interpolates :id_partition_in_8 do |attachment, style|
+  attachment.instance.id.to_s.scan(/.{8}/).join("/")
+end
+
 ##
 # mongoid criteria uses a different syntax.
 module Paperclip
   module Helpers
+    # Find all instances of the given Active Record model +klass+ with attachment +name+.
+    # This method is used by the refresh rake tasks.
     def each_instance_with_attachment(klass, name)
-      class_for(klass).unscoped.where("#{name}_file_name".to_sym.ne => nil).each do |instance|
-        yield(instance)
+      if defined?(Mongoid::Document) && class_for(klass) < Mongoid::Document
+        class_for(klass).unscoped.where("#{name}_file_name" => {:$exists => true}).to_a.map do |instance|
+          yield(instance)
+        end
+      else
+        class_for(klass).unscoped.where("#{name}_file_name IS NOT NULL").find_each do |instance|
+          yield(instance)
+        end
       end
     end
   end
@@ -53,53 +66,60 @@ end
 #  field :avatar_file_size,    :type => Integer
 #  field :avatar_updated_at,   :type => DateTime
 #  field :avatar_fingerprint,  :type => String
-#
+
 module Mongoid
   module Paperclip
-
-    ##
-    # Extends the model with the defined Class methods
-    def self.included(base)
-      base.extend(ClassMethods)
-    end
+    extend ActiveSupport::Concern
 
     module ClassMethods
-
-      ##
+      
+      # https://github.com/meskyanichi/mongoid-paperclip/pull/45
+      def after_commit(*args, &block)
+        options = args.pop if args.last.is_a? Hash
+        if options
+          case options[:on]
+          when :create
+            after_create(*args, &block)
+          when :update
+            after_update(*args, &block)
+          when :destroy
+            after_destroy(*args, &block)
+          else
+            after_save(*args, &block)
+          end
+        else
+          after_save(*args, &block)
+        end
+      end
+      
       # Adds Mongoid::Paperclip's "#has_mongoid_attached_file" class method to the model
       # which includes Paperclip and Paperclip::Glue in to the model. Additionally
       # it'll also add the required fields for Paperclip since MongoDB is schemaless and doesn't
       # have migrations.
-      def has_mongoid_attached_file(field, options = {})
-
-        ##
+      def has_mongoid_attached_file(field_name, options = {})
         # Include Paperclip and Paperclip::Glue for compatibility
         unless self.ancestors.include?(::Paperclip)
           include ::Paperclip
           include ::Paperclip::Glue
         end
-
-        ##
+        
         # Invoke Paperclip's #has_attached_file method and passes in the
         # arguments specified by the user that invoked Mongoid::Paperclip#has_mongoid_attached_file
-        has_attached_file(field, options)
+        has_attached_file(field_name, options)
 
-        ##
         # Define the necessary collection fields in Mongoid for Paperclip
-        field(:"#{field}_file_name",    :type => String)
-        field(:"#{field}_content_type", :type => String)
-        field(:"#{field}_file_size",    :type => Integer)
-        field(:"#{field}_updated_at",   :type => DateTime)
-        field(:"#{field}_fingerprint",  :type => String)
-      end
-
-      ##
-      # This method is deprecated
-      def has_attached_file(field, options = {})
-        raise "Mongoid::Paperclip#has_attached_file is deprecated, " +
-              "Use 'has_mongoid_attached_file' instead"
+        field :"#{field_name}_file_name",    type: String, default: nil
+        field :"#{field_name}_content_type", type: String, default: nil
+        field :"#{field_name}_file_size",    type: Integer, default: nil
+        field :"#{field_name}_updated_at",   type: Time, default: nil
+        field :"#{field_name}_fingerprint",  type: String, default: nil
+        
+        # convenience attr (RailsAdmin uses this naming)
+        attr_accessor :"remove_#{field_name}"
+        before_validation do
+           self.send(field).clear if self.send(:"remove_#{field_name}").present?
+        end
       end
     end
-
   end
 end
