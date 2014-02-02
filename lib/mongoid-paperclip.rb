@@ -108,11 +108,11 @@ module Mongoid
         has_attached_file(field_name, options)
 
         # Define the necessary collection fields in Mongoid for Paperclip
-        field :"#{field_name}_file_name",    type: String, default: nil
-        field :"#{field_name}_content_type", type: String, default: nil
-        field :"#{field_name}_file_size",    type: Integer, default: nil
-        field :"#{field_name}_updated_at",   type: Time, default: nil
-        field :"#{field_name}_fingerprint",  type: String, default: nil
+        field :"#{field_name}_file_name",    type: String
+        field :"#{field_name}_content_type", type: String
+        field :"#{field_name}_file_size",    type: Integer
+        field :"#{field_name}_updated_at",   type: Time
+        field :"#{field_name}_fingerprint",  type: String
         
         # convenience attr (RailsAdmin uses this naming)
         attr_accessor :"delete_#{field_name}"

@@ -3,6 +3,9 @@ require "spec_helper"
 describe 'Normal' do  
   it 'saves file' do
     t = MyTest.create!(test: @file)
+    t.test_content_type.should eq 'image/gif'
+    t.test_file_size.should eq 4357
+    t.test_fingerprint.should eq 'ad440d5012228c0ea65dab7e0d4bce28'
   end
 end
 
