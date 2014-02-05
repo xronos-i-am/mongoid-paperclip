@@ -12,7 +12,7 @@ GIT
 PATH
   remote: .
   specs:
-    glebtv-mongoid-paperclip (0.2.1)
+    glebtv-mongoid-paperclip (0.2.2)
       mongoid (>= 3.0, < 5.0)
       paperclip (>= 2.3.6)
 

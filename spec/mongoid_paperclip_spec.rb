@@ -7,6 +7,13 @@ describe 'Normal' do
     t.test_file_size.should eq 4357
     t.test_fingerprint.should eq 'ad440d5012228c0ea65dab7e0d4bce28'
   end
+  
+  it 'deletes file' do
+    t = MyTest.create!(test: @file)
+    t.delete_test = true
+    t.save!
+    t.test?.should eq false
+  end
 end
 
 describe 'Embedded' do
