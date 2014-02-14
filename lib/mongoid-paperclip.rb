@@ -148,7 +148,7 @@ module Mongoid
         # convenience attr (RailsAdmin uses this naming)
         attr_accessor :"delete_#{field_name}"
         before_validation do
-           self.send(field_name).clear if self.send(:"delete_#{field_name}").present?
+           self.send(field_name).clear if self.send(:"delete_#{field_name}").present? && self.send(:"delete_#{field_name}") && self.send(:"delete_#{field_name}") != '0'
         end
       end
     end
