@@ -17,7 +17,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = %x[git ls-files -- {spec}/*].split("\n")
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'paperclip', ['>= 2.3.6']
+  # pinned because of https://github.com/thoughtbot/paperclip/issues/1845
+  gem.add_dependency 'paperclip', ['>= 3.4', '!= 4.3.0']
   gem.add_dependency "mongoid", [">= 3.0", "< 5.0"]
   gem.add_development_dependency "bundler"
   gem.add_development_dependency "rspec"
